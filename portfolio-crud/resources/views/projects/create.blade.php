@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <h2>Add New Project</h2>
-    <a href="{{ url('projects') }}" class="btn btn-danger float-end">Back</a>
+    <a href="{{ url('projects') }}" class="btn btn-danger float-end mb-3">Back</a>
                         
     <form method="POST" action="{{ route('projects.store') }}" enctype="multipart/form-data">
         @csrf
