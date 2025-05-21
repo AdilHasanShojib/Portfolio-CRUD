@@ -2,63 +2,74 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+use App\Models\Project;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+     public function index() {
+        $projects = Project::paginate(5);
+        return view('projects.index', [
+            'projects' => $projects
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('projects.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-    {
-        //
+{
+    $request->validate([
+        'title' => 'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        'status' => 'required|in:draft,published',
+    ]);
+
+    $imageName = time() . '.' . $request->image->extension();
+    $request->image->move(public_path('images'), $imageName);
+
+    Project::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'project_url' => $request->project_url,
+        'image' => $imageName,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->route('projects.index')->with('success', 'Project created.');
+}
+
+
+    public function show(Project $project) {
+        return view('projects.show', compact('project'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+    public function edit(Project $project) {
+        return view('projects.edit', compact('project'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+    public function update(Request $request, Project $project) {
+        $request->validate(['title' => 'required']);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $project->image = $imagePath;
+        }
+
+        $project->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'project_url' => $request->project_url,
+            'status' => $request->status
+        ]);
+
+        return redirect()->route('projects.index')->with('success', 'Project updated!');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(Project $project) {
+        $project->delete();
+        return redirect()->route('projects.index')->with('success', 'Project deleted!');
     }
 }
