@@ -45,7 +45,7 @@ http://127.0.0.1:8000/projects
 
 ## 📸 Screenshot
 
-![Website Screenshot](screenshot/Screenshot.jpg)
+![Website Screenshot](https://github.com/AdilHasanShojib/Portfolio-CRUD/blob/main/portfolio-crud/screenshot/Screenshot.jpg)
 
 
 🗄️ Database Name
