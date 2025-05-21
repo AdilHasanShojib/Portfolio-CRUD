@@ -1,6 +1,6 @@
 ## 🧰 Laravel Version Used
 
-- Laravel **10.x**
+- Laravel Framework 10.48.29
 
 ---
 
